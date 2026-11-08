@@ -15,44 +15,81 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download, classify and filter official listings
+      - name: Download and classify official listings
         run: |
           python - <<'PY'
-          import csv, json, urllib.request, datetime, pathlib, io
+          import csv, json, urllib.request, datetime, pathlib, io, re
+          from collections import Counter
 
           sources = {
               "NASDAQ": "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt",
-              "NYSE American": "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt",
+              "NYSE American": "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
           }
 
           def classify(name):
-              n = name.lower()
-              if any(k in n for k in ("warrant", "right", "unit", "preferred", "depositary receipt", "note")):
+              n = re.sub(r"\s+", " ", name.lower()).strip()
+
+              excluded = [
+                  r"\bwarrants?\b", r"\brights?\b",
+                  r"\bunits?\b", r"\bpreferred\b",
+                  r"\bnotes?\b", r"\bdebentures?\b",
+                  r"\bbonds?\b", r"\bsubscription receipts?\b",
+                  r"\bwhen[- ]issued\b", r"\betf\b",
+                  r"\bfund\b", r"exchange[- ]traded",
+                  r"\bclosed[- ]end\b", r"\binvestment trust\b",
+                  r"\bmutual fund\b", r"\bindex fund\b",
+                  r"shares of beneficial interest"
+              ]
+              if any(re.search(p, n) for p in excluded):
                   return None
-              if any(k in n for k in ("american depositary share", "american depositary shares", "ads representing", "adr")):
+
+              adr = [
+                  r"american depositary shares?",
+                  r"american depositary receipts?",
+                  r"global depositary shares?",
+                  r"global depositary receipts?",
+                  r"\bADR\b", r"\bADS\b"
+              ]
+              if any(re.search(p, n) for p in adr):
                   return "ADR"
-              if any(k in n for k in ("common stock", "ordinary share", "ordinary shares")):
+
+              common = [
+                  r"\bcommon stock\b",
+                  r"\bcommon shares?\b",
+                  r"\bordinary shares?\b"
+              ]
+              if any(re.search(p, n) for p in common):
                   return "보통주"
+
               return None
 
           symbols = {}
+
           for exchange, url in sources.items():
-              req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 microcap-scanner"})
-              with urllib.request.urlopen(req, timeout=40) as response:
+              req = urllib.request.Request(
+                  url, headers={"User-Agent": "Mozilla/5.0 microcap-scanner"}
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
                   raw = response.read().decode("utf-8-sig")
 
               for row in csv.reader(io.StringIO(raw), delimiter="|"):
                   if not row or row[0].startswith("File Creation Time"):
                       continue
+                  if row[0] in ("Symbol", "ACT Symbol"):
+                      continue
 
                   if exchange == "NASDAQ":
-                      if len(row) < 7 or row[3] == "Y" or row[6] == "Y":
+                      if len(row) < 8:
                           continue
                       ticker, name = row[0].strip(), row[1].strip()
+                      if row[3] == "Y" or row[6] == "Y" or row[7] == "Y":
+                          continue
                   else:
-                      if len(row) < 7 or row[2] != "A" or row[4] == "Y" or row[6] == "Y":
+                      if len(row) < 8 or row[2] != "A":
                           continue
                       ticker, name = row[0].strip(), row[1].strip()
+                      if row[4] == "Y" or row[6] == "Y":
+                          continue
 
                   security_type = classify(name)
                   if ticker and security_type:
@@ -63,18 +100,28 @@ jobs:
                           "security_type": security_type
                       }
 
+          if not symbols:
+              raise RuntimeError("No symbols collected")
+
+          types = Counter(x["security_type"] for x in symbols.values())
+          exchanges = Counter(x["exchange"] for x in symbols.values())
+
           data = {
               "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              "source": "NasdaqTrader Symbol Directory",
+              "source": "NasdaqTrader",
               "count": len(symbols),
-              "policy": "Common stocks and ADRs included; ETFs, warrants, units, preferreds and rights excluded",
+              "counts_by_type": dict(types),
+              "counts_by_exchange": dict(exchanges),
               "symbols": sorted(symbols.values(), key=lambda x: x["ticker"])
           }
 
           out = pathlib.Path("data/listings.json")
           out.parent.mkdir(parents=True, exist_ok=True)
           out.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-          print(f"Wrote {len(symbols)} common-stock/ADR symbols")
+
+          print("TOTAL:", len(symbols))
+          print("TYPES:", dict(types))
+          print("EXCHANGES:", dict(exchanges))
           PY
 
       - name: Commit updated directory
@@ -82,5 +129,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/listings.json
-          git diff --cached --quiet || git commit -m "Update common stock and ADR directory"
+          git diff --cached --quiet || git commit -m "Improve stock and ADR classification"
           git push
