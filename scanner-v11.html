@@ -1,0 +1,201 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101827"><title>미국 초소형주 급등 검색기 v1.1 무료 시세 자동 수집</title>
+<style>
+:root{--bg:#0b1220;--p:#121d2e;--p2:#18263a;--line:#26364c;--t:#eef4fb;--m:#9aabc0;--g:#25c58a;--y:#f5c451;--r:#ff6978}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:system-ui,sans-serif}header{padding:20px 16px;background:#111e31;border-bottom:1px solid var(--line)}h1{font-size:20px;margin:0 0 5px}.sub,.muted{color:var(--m);font-size:12px;line-height:1.5}.wrap{max-width:780px;margin:auto;padding:14px}.notice{background:#302817;border:1px solid #66552b;color:#ffe3a0;border-radius:12px;padding:11px;font-size:12px;line-height:1.55;margin-bottom:12px}.box,.card,.stat{background:var(--p);border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{margin:0}.stat small{display:block;color:var(--m);font-size:11px}.stat b{font-size:20px}.btns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button{background:var(--g);color:#062117;border:0;border-radius:10px;padding:11px 13px;font-weight:750;font-size:13px}button.alt{background:var(--p2);color:var(--t);border:1px solid var(--line)}button.red{background:#49242c;color:#ffd9de}input,select,textarea{width:100%;background:#0c1625;color:var(--t);border:1px solid var(--line);border-radius:9px;padding:11px;font-size:14px}label{display:block;color:var(--m);font-size:12px;margin:9px 0 5px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.full{grid-column:1/-1}.cardtop{display:flex;justify-content:space-between;gap:8px}.score{font-size:20px;color:var(--g);font-weight:850;text-align:right}.tag{display:inline-block;background:#203148;color:#cfe0f7;border-radius:18px;padding:5px 7px;font-size:10px;margin:3px}.warn{background:#493a1d;color:#ffe1a0}.metricgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.metric{background:#0d1726;border-radius:8px;padding:8px;font-size:12px;overflow-wrap:anywhere}.metric small{display:block;color:var(--m);font-size:10px}.actions{display:flex;gap:8px;margin-top:10px}.actions button{flex:1}.results{max-height:340px;overflow:auto}.symbol{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:9px 0;font-size:12px}.symbol:last-child{border:0}.hidden{display:none}.section{font-size:15px;margin:18px 0 8px}footer{text-align:center;color:var(--m);font-size:10px;padding:18px;line-height:1.6}.help{display:block;color:var(--m);font-size:10px;line-height:1.45;margin-top:4px}@media(max-width:430px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.stats{gap:5px}.stat{padding:10px}.stat b{font-size:18px}}
+ .riskbox{border:1px solid #42617a;background:#101f30;border-radius:10px;padding:11px;margin:10px 0;font-size:12px;line-height:1.65}.riskbox strong{color:#f5c451}.riskbox a{color:#8fc7ff}.riskrow{border-top:1px solid #26364c;padding-top:6px;margin-top:6px}.riskmuted{color:#9aabc0}.riskdanger{color:#ff8995}.riskgood{color:#67dbad} </style></head><body>
+<header><h1>미국 초소형주 급등 검색기</h1><div class="sub">NASDAQ · NYSE American | 무료 데이터 MVP v0.7<br>공식 상장목록 + SEC 공시 감시 + 희석 시나리오 분석</div></header><div class="wrap">
+<div class="notice"><b>데이터 상태 안내</b><br>상장목록은 GitHub Actions가 NasdaqTrader에서 가져온 자료입니다. SEC EDGAR 공시는 GitHub Actions가 수집해 표시합니다. 주가·Float·RVOL·Short Float·CTB는 아직 자동 연결되지 않았으며, SEC 서식만으로 실제 희석 수량이나 매도 가능 물량을 확정하지 않습니다. 확인하지 않은 수치는 미확인으로 두세요.</div>
+<div class="stats"><div class="stat"><small>상장목록 DB</small><b id="dbcount">0</b></div><div class="stat"><small>감시 후보</small><b id="count">0</b></div><div class="stat"><small>평균 점수</small><b id="avg">—</b></div></div>
+<div class="box"><b>1. 공식 상장목록 자동 불러오기</b><p class="muted">저장된 NasdaqTrader 공식 목록을 읽습니다. DB 갱신은 GitHub Actions에서 실행합니다.</p><div class="btns"><button onclick="loadListings()">상장목록 불러오기 / 새로고침</button><button class="alt" onclick="location.href='https://github.com/hoy3876-dot/microcap-scanner/actions'">자동 갱신 실행 화면</button></div><div id="dbstatus" class="muted">상장목록을 불러오지 않았습니다.</div></div>
+
+<div class="box"><b>SEC EDGAR 공시 자동 감시 · 무료</b><p class="muted">data/sec_watchlist.txt에 감시 티커를 적으면 GitHub Actions가 SEC 공식 제출 내역을 조회합니다. 검색기는 배포된 data/sec_filings.json을 읽습니다.</p><div class="btns"><button onclick="loadSECData()">SEC 공시 새로고침</button><button class="alt" onclick="location.href='https://github.com/hoy3876-dot/microcap-scanner/actions'">SEC 자동 수집 실행</button></div><div id="secstatus" class="muted">SEC 공시 자료를 불러오는 중입니다…</div><div class="help">서식 알림은 원문 확인을 위한 신호입니다. S-1/S-3/424B/EFFECT가 있다고 해서 모든 등록 주식이 즉시 매도 가능한 것은 아닙니다.</div></div>
+<div class="box"><b>2. 상장목록에서 종목 찾기</b><label>티커 또는 회사명 검색</label><input id="q" placeholder="예: AIXI 또는 회사명" oninput="searchDirectory()"><div class="muted" id="searchhint">상장목록을 먼저 불러오세요.</div><div id="searchresults" class="results"></div></div>
+<div class="notice"><b>종목 유형 정책</b><br>ADR과 보통주를 모두 포함합니다. ETF·워런트·유닛·우선주 등은 공식 목록 수집 단계에서 제외합니다. ADR은 목록의 증권 유형과 회사명으로 판별하고 불확실하면 미분류로 둡니다.</div>
+<div class="section">3. 감시 후보 순위</div><div class="btns"><button onclick="toggleForm()">＋ 직접 종목 추가</button><button class="alt" onclick="exportData()">후보 백업</button><button class="alt" onclick="$('restore').click()">후보 복원</button><input id="restore" class="hidden" type="file" accept=".json" onchange="restoreData(event)"></div>
+<div class="box hidden" id="formbox"><b id="formtitle">후보 정보 입력</b><form id="form"><div class="grid">
+<div><label>티커 *</label><input id="ticker" required maxlength="15"></div><div><label>회사명</label><input id="company"></div><div><label>거래소</label><input id="exchange"></div><div><label>증권 유형</label><select id="security_type"><option value="">미분류</option><option value="보통주">보통주</option><option value="ADR">ADR</option></select></div>
+<div><label>현재가 USD</label><input id="price" type="number" min="0" step=".0001"></div><div><label>Float (백만 주)</label><input id="float" type="number" min="0" step=".01"></div><div><label>RVOL (배수)</label><input id="rvol" type="number" min="0" step=".1"></div><div><label>Short Float (%)</label><input id="short_float" type="number" min="0" step=".1"></div><div><label>CTB (%)</label><input id="ctb" type="number" min="0" step=".1"></div><div><label>대차 가능 수량</label><input id="borrow" type="number" min="0" step="1"></div>
+<div><label>희석 위험</label><select id="dilution"><option value="">미확인</option><option value="low">낮음(공시 확인)</option><option value="mid">보통</option><option value="high">높음</option></select></div><div><label>워런트 상태</label><select id="warrant"><option value="">미확인</option><option value="favorable">고정형 OTM</option><option value="neutral">혼합</option><option value="bad">변동형/대량</option><option value="none">확인된 워런트 없음</option></select></div><div><label>촉매</label><select id="catalyst"><option value="">미확인</option><option value="near">1~4주 내 확인</option><option value="some">날짜 불명확</option><option value="none">확인된 촉매 없음</option></select></div><div><label>촉매 예정일</label><input id="catalyst_date" type="date"></div>
+<div class="full"><label>Float 출처 · 기준일</label><input id="source" placeholder="예: SEC 10-Q, 2026-11-08 / 공급사명"></div><div><label>워런트 수량 (주)</label><input id="warrant_qty" type="number" min="0" step="1"></div><div><label>워런트 행사가격 ($)</label><input id="warrant_strike" type="number" min="0" step=".0001"></div><div><label>워런트 만기일</label><input id="warrant_expiry" type="date"></div><div><label>행사 방식</label><select id="warrant_exercise"><option value="">미확인</option><option>현금 행사</option><option>무현금 행사</option><option>둘 다 가능</option><option>기타/제한 확인 필요</option></select></div>
+<div><label>ATM 잔여 한도 ($)</label><input id="atm_remaining" type="number" min="0" step="1"></div><div><label>ELOC 잔여 한도 ($)</label><input id="eloc_remaining" type="number" min="0" step="1"></div><div><label>CB 전환 가능 주식 수</label><input id="cb_shares" type="number" min="0" step="1"></div><div><label>PIPE/사모 재판매 가능 주식 수</label><input id="pipe_resale" type="number" min="0" step="1"></div>
+<div><label>발행주식 수 O/S (주, 기준일 필수)</label><input id="outstanding_shares" type="number" min="1" step="1"></div><div><label>O/S 기준일</label><input id="outstanding_date" type="date"></div><div><label>CB 미상환 원금 ($)</label><input id="cb_principal" type="number" min="0" step="0.01"></div><div><label>CB 고정 전환가격 ($)</label><input id="cb_conversion_price" type="number" min="0" step="0.0001"></div><div><label>CB 전환가격 구조</label><select id="cb_price_type"><option value="">미확인</option><option value="fixed">고정형 (리셋 없음 확인)</option><option value="reset">리셋/변동형</option><option value="unknown">조건 확인 필요</option></select></div><div><label>워런트 가격 조정 여부</label><select id="warrant_reset"><option value="">미확인</option><option value="no">조정 없음 확인</option><option value="yes">리셋/조정 가능</option><option value="unknown">조건 확인 필요</option></select></div><div><label>기타 잠재 발행 주식 수 (주)</label><input id="other_shares" type="number" min="0" step="1"></div><div><label>기타 발행 물량 설명</label><input id="other_shares_note" placeholder="예: RSU / 옵션 / 확정 발행 예정"></div><div class="full"><label>희석 수치 확인 근거 (공시 URL·페이지·확인일)</label><textarea id="dilution_evidence" rows="2" placeholder="예: 2026-11-06 424B5, S-12, 전환가격 $..., 확인일 ..."></textarea></div><div class="full"><label>물량 중복 여부 / 락업·재판매 제한 메모</label><textarea id="overlap_note" rows="2" placeholder="예: PIPE 재판매 등록 주식은 기존 O/S에 포함되므로 신규 희석 계산에서 제외"></textarea></div>
+<div><label>S-1/S-3/F-3 등록 상태</label><select id="registration"><option value="">미확인</option><option>신규 등록 없음 확인</option><option>등록 있음 · 재판매 제한/미효력</option><option>재판매 등록 효력 발생</option><option>확인 필요</option></select></div><div><label>SEC 공시 기준일</label><input id="sec_date" type="date"></div><div class="full"><label>SEC 공시 링크</label><input id="sec_url" type="url" placeholder="https://www.sec.gov/Archives/..."></div><div class="full"><label>SEC / 희석 / 이벤트 메모</label><textarea id="notes" rows="3" placeholder="공시명, 발행 수량, 행사가격, 재판매 조건, 촉매 근거 등"></textarea></div></div>
+<small class="help">빈 항목은 미확인으로 저장됩니다. 미확인 항목은 점수 산정에서 제외하며 실제 데이터처럼 0으로 취급하지 않습니다.</small><div class="actions"><button>저장 및 점수 계산</button><button type="button" class="alt" onclick="closeForm()">취소</button></div></form></div>
+<div id="watchlist"></div><footer>상장목록은 현재 거래 가능 여부·가격·Float·투자 적합성을 보증하지 않습니다. 점수는 상승 확률이나 매수 신호가 아닙니다. 점수는 확인된 입력 항목만 반영하며 출처·기준일 검증이 필요합니다. 이 파일은 주가·Float·RVOL·Short Float·CTB 실시간 API는 아직 연결되어 있지 않습니다. SEC 공시는 GitHub Actions가 수집한 공개 제출 내역입니다.</footer></div>
+<script>
+const $=id=>document.getElementById(id),K='mc_v03_watch';let watch=[],dir=[],editing=null,secDB={};
+const fields='ticker company exchange security_type price float rvol short_float ctb borrow dilution warrant catalyst catalyst_date source warrant_qty warrant_strike warrant_expiry warrant_exercise atm_remaining eloc_remaining cb_shares pipe_resale registration sec_date sec_url notes outstanding_shares outstanding_date cb_principal cb_conversion_price cb_price_type warrant_reset other_shares other_shares_note dilution_evidence overlap_note'.split(' ');
+const numeric=new Set('price float rvol short_float ctb borrow warrant_qty warrant_strike atm_remaining eloc_remaining cb_shares pipe_resale outstanding_shares cb_principal cb_conversion_price other_shares'.split(' '));
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function secType(x){let s=String(x.security_type||'').toLowerCase(),n=String(x.name||'').toLowerCase();if(s.includes('adr')||s.includes('depositary')||n.includes('american depositary')||n.includes('global depositary'))return'ADR';if(s.includes('common')||s.includes('ordinary')||n.includes('common stock')||n.includes('ordinary shares'))return'보통주';return x.security_type||'미분류'}
+function loadSaved(){try{let a=JSON.parse(localStorage.getItem(K)||'[]');watch=Array.isArray(a)?a.map(x=>({...x,security_type:secType({security_type:x.security_type,name:x.company})})):[]}catch(e){watch=[]}}
+async function loadListings(){ $('dbstatus').textContent='공식 상장목록 자료를 확인하는 중입니다…';try{let r=await fetch('./data/listings.json?ts='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);let j=await r.json();if(!Array.isArray(j.symbols))throw Error('JSON 형식 오류');dir=j.symbols.map(x=>({...x,security_type:secType(x)}));$('dbstatus').textContent=`불러오기 성공: ${dir.length.toLocaleString()}개 · 생성시각 ${j.generated_at||'미표기'} · 출처 NasdaqTrader`;searchDirectory();updateStats()}catch(e){$('dbstatus').textContent='목록을 불러오지 못했습니다. Actions 실행과 Pages 배포를 확인하세요. ('+e.message+')'}}
+
+const SEC_DILUTION_FORMS = new Set(['S-1','S-3','F-1','F-3','EFFECT','POS AM','RW']);
+function secBadge(form){
+  if(SEC_DILUTION_FORMS.has(form) || /^424B/.test(form)) return '희석·등록 관련 원문 확인';
+  if(['8-K','10-Q','10-K','6-K','20-F'].includes(form)) return '사업·재무·이벤트 원문 확인';
+  if(['4','SC 13D','SC 13G','13D','13G'].includes(form)) return '내부자·지분 변동 확인';
+  return '공시 원문 확인';
+}
+async function loadSECData(){
+  const el=$('secstatus'); if(el) el.textContent='SEC 공시 파일 확인 중…';
+  try{
+    const r=await fetch('./data/sec_filings.json?ts='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw Error('HTTP '+r.status);
+    const j=await r.json();
+    secDB={};
+    (j.filings||[]).forEach(f=>{const t=String(f.ticker||'').toUpperCase();(secDB[t] ||= []).push(f);});
+    if(el) el.textContent=`불러오기 성공 · ${j.watchlist_count??j.ticker_count??Object.keys(secDB).length}개 감시 티커 · ${j.filing_count||(j.filings||[]).length}건 · 생성 ${j.generated_at||'미표기'} · SEC 공식 EDGAR`;
+    render();
+  }catch(e){
+    if(el) el.textContent='SEC 자료 미확인: Actions 실행 및 data/sec_filings.json 배포를 확인하세요. ('+e.message+')';
+  }
+}
+function secPanel(ticker){
+  const items=(secDB[String(ticker||'').toUpperCase()]||[]).slice(0,6);
+  if(!items.length) return '<div class="metric full"><small>SEC 자동 감시</small>미확인 · 감시 목록 등록 및 다음 Actions 실행 후 표시됩니다.</div>';
+  return '<div class="metric full"><small>SEC 최근 공시 · '+items.length+'건 표시</small>'+items.map(f=>{
+    const form=esc(f.form||'미상'),date=esc(f.filing_date||'날짜 미상'),desc=esc(f.description||f.primary_document||'공시 원문');
+    const url=f.url&&/^https:\/\/www\.sec\.gov\//.test(f.url)?f.url:'#';
+    return `<div style="padding:6px 0;border-top:1px solid #26364c"><b>${form}</b> · ${date}<br><span class="muted">${secBadge(f.form||'')} · ${desc}</span><br>${url!=='#'?`<a style="color:#8fc7ff" href="${url}" target="_blank" rel="noopener">SEC 원문 열기</a>`:'<span class="muted">원문 링크 미확인</span>'}</div>`;
+  }).join('')+'</div>';
+}
+
+function fmtNum(n){return Number(n).toLocaleString('ko-KR',{maximumFractionDigits:2})}
+function dilutionPanel(s){
+ const has=n=>s[n]!==null&&s[n]!==undefined&&s[n]!==''&&Number.isFinite(Number(s[n]));
+ const n=k=>Number(s[k]);
+ const evidence=String(s.dilution_evidence||'').trim();
+ const osOK=has('outstanding_shares')&&n('outstanding_shares')>0&&!!s.outstanding_date;
+ const items=[];let convertible=null;
+ if(has('cb_shares')){convertible=n('cb_shares');items.push(['CB 전환 주식 수 (입력값)',convertible]);}
+ else if(has('cb_principal')&&has('cb_conversion_price')&&n('cb_conversion_price')>0&&s.cb_price_type==='fixed'){
+  convertible=n('cb_principal')/n('cb_conversion_price');items.push(['CB 원금÷고정 전환가격 (이론값)',convertible]);
+ }
+ if(has('warrant_qty'))items.push(['워런트 행사 시 발행 가능 주식 (입력값)',n('warrant_qty')]);
+ if(has('other_shares'))items.push(['기타 신규 발행 주식 (입력값)',n('other_shares')]);
+ // PIPE resale shares are not counted: resale may be already outstanding. ATM/ELOC dollar caps are not shares.
+ const uncertain=s.cb_price_type==='reset'||s.warrant_reset==='yes';
+ const allKnown=has('warrant_qty')&&convertible!==null&&has('other_shares');
+ const total=items.reduce((a,x)=>a+x[1],0);
+ const canCompute=osOK&&allKnown&&!uncertain&&!!evidence&&!!s.overlap_note;
+ let html='<div class="riskbox"><b>SEC 희석 위험 · 수치 검증 패널 (v0.8)</b>';
+ html+='<div class="riskrow">SEC 공시 자동 표시와 수치 자동 추출은 별개입니다. 아래 수치는 <strong>사용자 입력/단순 산식</strong>이며 SEC 원문과 대조 전에는 검증되지 않았습니다.</div>';
+ html+='<div class="riskrow">발행주식 수 O/S: '+(osOK?fmtNum(n('outstanding_shares'))+'주 · '+esc(s.outstanding_date):'미확인 (주식 수 및 기준일 필요)')+'</div>';
+ html+=items.map(([name,value])=>'<div class="riskrow">'+esc(name)+': '+fmtNum(value)+'주</div>').join('');
+ html+='<div class="riskrow">PIPE 재판매 등록: '+(has('pipe_resale')?fmtNum(n('pipe_resale'))+'주 (신규 희석 합산 제외)':'미확인')+' · ATM/ELOC: 달러 한도만으로 발행 주식 수 산출 불가</div>';
+ if(uncertain)html+='<div class="riskrow riskdanger">주의: 전환가격 또는 워런트 리셋 가능성이 표시되어 고정가격 기반 최대 희석률 산출을 중단합니다.</div>';
+ if(canCompute){let pct=total/n('outstanding_shares')*100;let post=total/(n('outstanding_shares')+total)*100;
+  html+='<div class="riskrow"><strong>입력 물량 합계(중복 제외 확인 전제): '+fmtNum(total)+'주</strong><br>현재 O/S 대비 잠재 증가율: '+fmtNum(pct)+'%<br>발행 후 신규 주식 비중: '+fmtNum(post)+'%</div>';
+ }else html+='<div class="riskrow riskmuted">희석률: 미확인 · O/S 기준일, CB 수량/고정가격, 워런트·기타 물량, 리셋 및 중복 확인 근거가 모두 필요합니다. 0주 입력은 실제로 없음을 검증한 경우에만 사용하세요.</div>';
+ if(evidence)html+='<div class="riskrow">입력 근거: '+esc(evidence)+'</div>';
+ if(s.overlap_note)html+='<div class="riskrow">중복·제한 확인: '+esc(s.overlap_note)+'</div>';
+ html+='<div class="riskrow riskmuted">주의: 위 산식은 조건부 시나리오입니다. S-1/S-3/424B5 등록액은 즉시 유통 물량과 다르며, 실제 최대 희석률 또는 투자 신호가 아닙니다.</div></div>';
+ return html;
+}
+function searchDirectory(){let q=$('q').value.trim().toUpperCase(),rows=dir.map(x=>({x,t:String(x.ticker||'').toUpperCase(),n:String(x.name||'').toUpperCase()}));let rank=o=>o.t===q?0:o.t.startsWith(q)?1:o.t.includes(q)?2:o.n===q?3:o.n.startsWith(q)?4:5;let res=q?rows.filter(o=>o.t.includes(q)||o.n.includes(q)).sort((a,b)=>rank(a)-rank(b)||a.t.localeCompare(b.t)).slice(0,40).map(o=>o.x):[];$('searchhint').textContent=dir.length?`티커 완전 일치 우선 · 최대 40개 표시 · 전체 DB ${dir.length.toLocaleString()}개`:'상장목록을 먼저 불러오세요.';$('searchresults').innerHTML=res.map(x=>`<div class="symbol"><div><b>${esc(x.ticker)}</b><br><span class="muted">${esc(x.name)} · ${esc(x.exchange)} · ${esc(x.security_type)}</span></div><button onclick="addFromDir('${esc(x.ticker)}')">후보 추가</button></div>`).join('')||(q?'<p class="muted">검색 결과가 없습니다.</p>':'')}
+function addFromDir(t){let x=dir.find(z=>z.ticker===t);if(!x)return;if(watch.some(z=>z.ticker===t)){alert('이미 후보에 있습니다.');return}if(watch.length>=200){alert('후보는 최대 200개까지 관리할 수 있습니다.');return}watch.push({id:String(Date.now()),ticker:x.ticker,company:x.name,exchange:x.exchange,security_type:x.security_type,price:null,float:null,rvol:null,short_float:null,ctb:null,borrow:null,dilution:'',warrant:'',catalyst:'',source:'NasdaqTrader 상장목록 · 주가/Float 미확인',notes:''});persist();$('q').value='';searchDirectory()}
+function score(s){let earned=0,max=0,k=0;function add(v,w,p){if(v!==null&&v!==undefined&&v!==''){max+=w;k++;earned+=p}}add(s.rvol,20,s.rvol>=5?20:s.rvol>=3?16:s.rvol>=2?10:s.rvol>=1?5:0);add(s.float,15,s.float<=5?15:s.float<=10?12:s.float<=20?7:2);add(s.dilution,25,({low:25,mid:13,high:0})[s.dilution]??0);add(s.warrant,10,({favorable:10,neutral:5,bad:0,none:10})[s.warrant]??0);add(s.catalyst,20,({near:20,some:10,none:0})[s.catalyst]??0);add(s.price,10,s.price>=.1&&s.price<=5?10:4);return{earned,max,k,p:max?Math.round(earned/max*100):0}}
+function persist(){localStorage.setItem(K,JSON.stringify(watch));render()}
+function val(v,s=''){return v===null||v===undefined||v===''?'미확인':esc(v)+s}
+function render(){watch.sort((a,b)=>score(b).p-score(a).p);$('watchlist').innerHTML='<h3 class="section">후보 종목 순위</h3>'+(watch.length?watch.map((s,i)=>{let z=score(s);return `<article class="card"><div class="cardtop"><div><b>${i+1}. ${esc(s.ticker)}</b><div class="muted">${esc(s.company)} · ${esc(s.exchange)}</div></div><div class="score">${z.p}<div class="muted">확인 항목 환산점수 /100<br>${z.k}/6 확인</div></div></div><div><span class="tag">${s.rvol==null?'RVOL 미확인':'RVOL '+s.rvol+'x'}</span><span class="tag">${s.float==null?'Float 미확인':'Float '+s.float+'M'}</span><span class="tag warn">${esc(s.security_type||'증권 유형 미분류')}</span></div><div class="metricgrid"><div class="metric"><small>현재가</small>${s.price==null?'미확인':'$'+esc(s.price)}</div><div class="metric"><small>희석 위험</small>${esc(s.dilution||'미확인')}</div><div class="metric"><small>워런트</small>${esc(s.warrant||'미확인')} · 수량 ${val(s.warrant_qty)}</div><div class="metric"><small>행사가 / 만기</small>${val(s.warrant_strike,' $')} / ${val(s.warrant_expiry)}</div><div class="metric"><small>ATM / ELOC 잔여</small>${val(s.atm_remaining,' $')} / ${val(s.eloc_remaining,' $')}</div><div class="metric"><small>CB 전환 / PIPE 재판매</small>${val(s.cb_shares,' 주')} / ${val(s.pipe_resale,' 주')}</div><div class="metric"><small>등록 상태</small>${esc(s.registration||'미확인')}</div>${secPanel(s.ticker)}</div>${dilutionPanel(s)}<p class="muted">출처: ${esc(s.source||'미기재')} · SEC 기준일: ${val(s.sec_date)}</p>${s.sec_url?`<p><a style="color:#8fc7ff" href="${esc(s.sec_url)}" target="_blank" rel="noopener">SEC 공시 링크 열기</a></p>`:''}${s.notes?'<p class="muted">'+esc(s.notes)+'</p>':''}<div class="actions"><button class="alt" onclick="editItem('${esc(s.id)}')">정보 입력/수정</button><button class="red" onclick="removeItem('${esc(s.id)}')">삭제</button></div></article>`}).join(''):'<div class="box muted">아직 후보가 없습니다. 상장목록에서 검색해 후보를 추가하세요.</div>');updateStats()}
+function updateStats(){$('dbcount').textContent=dir.length.toLocaleString();$('count').textContent=watch.length;let a=watch.map(s=>score(s)).filter(z=>z.k);$('avg').textContent=a.length?Math.round(a.reduce((n,z)=>n+z.p,0)/a.length):'—'}
+function toggleForm(){if($('formbox').classList.contains('hidden')){$('formbox').classList.remove('hidden');resetForm()}else closeForm()}function closeForm(){$('formbox').classList.add('hidden');resetForm()}function resetForm(){editing=null;$('form').reset();$('formtitle').textContent='후보 정보 입력'}
+function editItem(id){let s=watch.find(x=>x.id===id);if(!s)return;editing=id;$('formbox').classList.remove('hidden');$('formtitle').textContent=s.ticker+' 정보 수정';fields.forEach(k=>$(k).value=s[k]??'');window.scrollTo({top:0,behavior:'smooth'})}
+$('form').addEventListener('submit',e=>{e.preventDefault();let s={id:editing||String(Date.now())};fields.forEach(k=>{let v=$(k).value.trim();s[k]=numeric.has(k)?(v===''?null:Number(v)):(k==='ticker'?v.toUpperCase():v)});if(!s.ticker){alert('티커를 입력하세요.');return}if(editing)watch=watch.map(x=>x.id===editing?s:x);else watch.push(s);persist();closeForm()});
+function removeItem(id){if(confirm('후보에서 삭제할까요?')){watch=watch.filter(x=>x.id!==id);persist()}}
+function exportData(){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify({version:'0.8',exported_at:new Date().toISOString(),watchlist:watch},null,2)],{type:'application/json'}));a.href=u;a.download='microcap-watchlist-v08.json';a.click();URL.revokeObjectURL(u)}
+function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let j=JSON.parse(r.result),a=Array.isArray(j)?j:j.watchlist;if(!Array.isArray(a))throw Error();watch=a.map(x=>({...x,id:String(x.id||Date.now()+Math.random()),security_type:secType({security_type:x.security_type,name:x.company})}));persist();alert('복원 완료: '+watch.length+'개 후보')}catch(_){alert('백업 파일을 읽을 수 없습니다')}};r.readAsText(f);e.target.value=''}
+
+// v0.8: 무료 공개 데이터 상태, 출처 확인 및 수동 CSV 내보내기.
+function v08CSV(){
+ const cols=['ticker','company','exchange','price','float','rvol','outstanding_shares','outstanding_date','warrant_qty','warrant_strike','warrant_expiry','atm_remaining','eloc_remaining','cb_shares','pipe_resale','sec_date','sec_url','dilution_evidence','overlap_note'];
+ const csv=[cols.join(','),...watch.map(s=>cols.map(k=>'"'+String(s[k]??'').replace(/"/g,'""')+'"').join(','))].join('\r\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=u;a.download='microcap-v08-watchlist.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function v08Init(){
+ const top=document.querySelector('.wrap');if(!top)return;
+ const panel=document.createElement('div');panel.className='box';panel.style.marginBottom='12px';
+ panel.innerHTML='<b>v0.9 · 무료 데이터 검증 도구</b><p class="muted">NasdaqTrader 상장목록 및 SEC EDGAR 공시 메타데이터는 자동 파일 갱신 대상입니다. 주가·거래량·Float·워런트·ATM 잔여는 실시간 자동 확인된 값이 아닙니다. 미확인 값은 0으로 대체하지 않습니다.</p><div class="actions"><button type="button" id="v08refresh">무료 데이터 새로고침</button><button type="button" class="alt" id="v08csv">후보 CSV 저장</button></div><p class="muted" id="v08stamp">파일 갱신 시각은 각 데이터 상태 영역에서 확인하세요.</p>';
+ top.insertBefore(panel,top.firstChild);
+ document.getElementById('v08refresh').onclick=async()=>{document.getElementById('v08stamp').textContent='새로고침 요청: '+new Date().toLocaleString('ko-KR')+' (실시간 시세 갱신 아님)';await Promise.allSettled([loadListings(),loadSECData()]);};
+ document.getElementById('v08csv').onclick=v08CSV;
+}
+v08Init();
+
+
+// v0.9: 공식 상장목록 전체에 대한 규칙 기반 자동 1차 선별.
+// 시세/거래량 데이터가 없는 종목을 급등 후보로 단정하지 않음.
+function v09Init(){
+ const top=document.querySelector('.wrap');if(!top)return;
+ const panel=document.createElement('section');panel.className='box';panel.style.marginBottom='12px';
+ panel.innerHTML=`<h3 style="margin-top:0">v0.9 · 전체 상장목록 자동 1차 선별</h3>
+ <p class="muted">공식 상장목록 전체를 종목 유형·거래소로 자동 분류합니다. SEC 공시 표시는 현재 감시 목록에 수집된 티커에 한합니다. <b>실시간 가격·거래량·Float 데이터가 없어 급등 가능성이나 조건 충족을 판정할 수 없습니다.</b></p>
+ <div class="btns"><button id="v09run">전체 목록 자동 선별</button><button class="alt" id="v09csv">선별 결과 CSV 저장</button></div>
+ <label style="display:block;margin:12px 0 6px">증권 유형</label><select id="v09type"><option value="all">보통주 + ADR</option><option value="common">보통주만</option><option value="adr">ADR만</option></select>
+ <label style="display:block;margin:12px 0 6px">SEC 공시 필터</label><select id="v09sec"><option value="all">모든 종목 (SEC 미수집 포함)</option><option value="filing">수집된 SEC 공시 있는 종목만</option><option value="risk">등록·희석 관련 공시 발견 종목만 (주의)</option><option value="clear">수집된 SEC 공시에서 등록·희석 관련 서식 미발견 (안전 확인 아님)</option></select>
+ <p id="v09status" class="muted">목록을 불러온 후 선별 버튼을 누르세요.</p><div id="v09results"></div>
+ <p class="muted">주의: SEC 서식 존재만으로 실제 희석 확정 불가. 공시 미발견은 희석 없음의 증거가 아닙니다. 상장목록의 증권 유형도 원문 검증이 필요합니다.</p></section>`;
+ top.insertBefore(panel,top.firstChild);
+ let selected=[];
+ const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ function run(){
+  const type=document.getElementById('v09type').value,sec=document.getElementById('v09sec').value;
+  const risk=f=>SEC_DILUTION_FORMS.has(String(f.form||'').toUpperCase())||/^424B/i.test(String(f.form||''));
+  selected=dir.filter(x=>{
+   const t=secType(x),fs=secDB[String(x.ticker||'').toUpperCase()]||[];
+   if(t!=='보통주'&&t!=='ADR')return false;
+   if(type==='common'&&t!=='보통주')return false;
+   if(type==='adr'&&t!=='ADR')return false;
+   if(sec==='filing'&&!fs.length)return false;
+   if(sec==='risk'&&!fs.some(risk))return false;
+   if(sec==='clear'&&(!fs.length||fs.some(risk)))return false;
+   return true;
+  }).map(x=>({...x,sec_count:(secDB[String(x.ticker||'').toUpperCase()]||[]).length,sec_risk:(secDB[String(x.ticker||'').toUpperCase()]||[]).some(risk)}));
+  document.getElementById('v09status').textContent=`선별 ${selected.length.toLocaleString()}개 / 상장목록 ${dir.length.toLocaleString()}개 · SEC 공시는 수집된 감시 티커에 한정 · 시세·Float 미확인`;
+  document.getElementById('v09results').innerHTML=selected.slice(0,50).map(x=>`<div class="symbol"><div><b>${esc(x.ticker)}</b><br><span class="muted">${esc(x.name)} · ${esc(x.exchange)} · ${esc(secType(x))} · SEC 수집 ${x.sec_count}건${x.sec_risk?' · 등록/희석 관련 서식 확인 필요':''}</span></div><button onclick="addFromDir('${esc(x.ticker)}')">후보 추가</button></div>`).join('')+(selected.length>50?'<p class="muted">화면은 처음 50개만 표시합니다. CSV에는 전체 선별 결과가 저장됩니다.</p>':'');
+ }
+ document.getElementById('v09run').onclick=run;
+ document.getElementById('v09csv').onclick=()=>{
+  if(!selected.length){alert('먼저 자동 선별을 실행하세요.');return}
+  const cols=['ticker','name','exchange','security_type','sec_count','sec_risk'];
+  const csv='\ufeff'+[cols.join(','),...selected.map(x=>cols.map(k=>quote(k==='security_type'?secType(x):x[k])).join(','))].join('\r\n');
+  const u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='microcap-v09-first-pass.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);
+ };
+}
+v09Init();
+
+
+// v1.0: User-imported free CSV quotes; never infer unavailable values.
+function v10Init(){
+ const panel=document.createElement('section');panel.className='box';panel.innerHTML=`
+ <h3 style="margin-top:0">v1.1 · 무료 시세 자동 수집 + CSV 조건 검색</h3>
+ <p class="muted">무료 제공처에서 합법적으로 받은 CSV를 직접 가져옵니다. 자동 실시간 시세 연결은 아닙니다. CSV의 기준일·출처를 확인하세요. 누락 수치는 미확인으로 남기고 합격 처리하지 않습니다.</p>
+ <div class="btns"><button type="button" id="v11auto">GitHub 무료 시세 불러오기</button></div><p class="muted" id="v11status">자동 시세는 감시목록 일부만 대상으로 하며 실시간이 아닙니다. Float·업종은 미확인일 수 있습니다.</p><label>CSV 가져오기 (ticker,price,float,rvol,sector,volume,asof)</label><input id="v10file" type="file" accept=".csv,text/csv">
+ <div class="grid"><div><label>최소 주가 ($)</label><input id="v10min" type="number" value="0.10" min="0" step="0.01"></div><div><label>최대 주가 ($)</label><input id="v10max" type="number" value="5" min="0" step="0.01"></div>
+ <div><label>최대 Float (백만 주)</label><input id="v10float" type="number" value="10" min="0" step="0.1"></div><div><label>최소 RVOL</label><input id="v10rvol" type="number" value="3" min="0" step="0.1"></div></div>
+ <label><input id="v10bio" type="checkbox" checked style="width:auto;margin-right:6px">바이오·제약 제외 (업종 정보 없는 종목도 제외)</label>
+ <div class="btns"><button id="v10run" type="button">검증 가능한 후보 상위 5개</button><button id="v10download" type="button" class="alt">결과 CSV 저장</button><button id="v10example" type="button" class="alt">CSV 양식 저장</button></div>
+ <div id="v10status" class="muted">CSV를 선택해 주세요. 기존 NasdaqTrader 목록은 종목 확인용으로 사용합니다.</div><div id="v10results"></div>
+ <p class="help">주의: Float·RVOL은 CSV 제공처의 값으로, SEC 검증을 뜻하지 않습니다. 희석·워런트·ATM/ELOC 정보가 미확인이면 별도 검증이 필요합니다. 점수는 단순 조건 순위이며 상승 확률이 아닙니다.</p>`;
+ const host=document.querySelector('.wrap');host.insertBefore(panel,host.firstChild);
+ let imported=[],results=[];
+ const el=id=>document.getElementById(id);
+ function parseCSV(text){let rows=[],row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(c===','&&!quoted){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(x=>x.trim()))rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(x=>x.trim()))rows.push(row);return rows}
+ const num=v=>{if(v===undefined||v===null||String(v).trim()==='')return null;let n=Number(String(v).replace(/,/g,''));return Number.isFinite(n)&&n>=0?n:null};
+ function csvDownload(name,lines){const b=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+ const quote=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
+ el('v11auto').onclick=async()=>{const status=el('v11status');status.textContent='data/free_quotes.json 불러오는 중…';try{const response=await fetch('./data/free_quotes.json?ts='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);const data=await response.json();if(!Array.isArray(data.rows))throw Error('rows 배열 없음');imported=data.rows.map(x=>({ticker:String(x.ticker||'').toUpperCase(),price:x.price??'',float:x.float??'',rvol:x.rvol??'',sector:x.sector??'',volume:x.volume??'',asof:x.asof??''})).filter(x=>x.ticker);status.textContent=`${imported.length}개 자동 시세 로드 · 생성 ${data.generated_at||'미확인'} · ${data.source||'출처 미확인'} · Float 미확인 종목은 엄격 필터에서 제외됩니다.`;el('v10status').textContent='자동 시세를 불러왔습니다. 필터 버튼을 누르세요.'}catch(err){status.textContent='자동 파일 로드 실패: '+err.message+' · GitHub Actions가 free_quotes.json을 생성했는지 확인하세요.'}};
+ el('v10example').onclick=()=>csvDownload('microcap-v10-template.csv',['ticker,price,float,rvol,sector,volume,asof','EXAMPLE,1.25,4.2,3.8,Technology,500000,2026-11-09']);
+ el('v10file').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{const rows=parseCSV((await f.text()).replace(/^\ufeff/,''));const heads=(rows.shift()||[]).map(x=>x.trim().toLowerCase());if(!['ticker','price','float','rvol'].every(x=>heads.includes(x)))throw Error('필수 열: ticker,price,float,rvol');imported=rows.map(r=>Object.fromEntries(heads.map((h,i)=>[h,(r[i]||'').trim()]))).filter(x=>x.ticker);el('v10status').textContent=`CSV ${imported.length}행 로드됨 · 파일: ${f.name} · 데이터의 신뢰성과 최신성은 별도 확인 필요`;}catch(err){imported=[];el('v10status').textContent='CSV 오류: '+err.message}};
+ el('v10run').onclick=()=>{const min=num(el('v10min').value),max=num(el('v10max').value),fl=num(el('v10float').value),rv=num(el('v10rvol').value);if([min,max,fl,rv].some(x=>x===null)||min>max){el('v10status').textContent='필터 숫자를 확인하세요.';return}if(!imported.length){el('v10status').textContent='먼저 CSV 파일을 선택하세요.';return}const symbols=new Map(dir.map(x=>[String(x.ticker).toUpperCase(),x]));let incomplete=0,unlisted=0,excluded=0;results=imported.map(x=>{const t=x.ticker.toUpperCase(),d=symbols.get(t),p=num(x.price),f=num(x.float),r=num(x.rvol),sector=x.sector||'';if(!d){unlisted++;return null}if(p===null||f===null||r===null||(el('v10bio').checked&&!sector)){incomplete++;return null}if(el('v10bio').checked&&/(bio|pharma|therapeutic|drug|biotech|제약|바이오)/i.test(sector)){excluded++;return null}if(p<min||p>max||f>fl||r<rv)return null;return {...x,ticker:t,price:p,float:f,rvol:r,company:d.name,exchange:d.exchange}}).filter(Boolean).sort((a,b)=>b.rvol-a.rvol||a.float-b.float).slice(0,5);
+ el('v10status').textContent=`조건 통과 상위 ${results.length}개 · 상장목록 미일치 ${unlisted}개 · 필수 데이터 부족 ${incomplete}개 · 바이오 제외 ${excluded}개 · CSV 입력 기준`;
+ el('v10results').innerHTML=results.length?results.map((x,i)=>`<div class="symbol"><div><b>${i+1}. ${esc(x.ticker)}</b> · ${esc(x.company)}</div><div class="muted">$${x.price} · Float ${x.float}M · RVOL ${x.rvol}x<br>${esc(x.sector||'업종 미확인')} · ${esc(x.asof||'기준일 미확인')}</div></div>`).join(''):'<p class="muted">확인된 데이터로 조건을 충족하는 종목이 없습니다.</p>';
+ };
+ el('v10download').onclick=()=>{if(!results.length){alert('먼저 선별을 실행하세요.');return}const keys=['ticker','company','exchange','price','float','rvol','sector','volume','asof'];csvDownload('microcap-v10-top5.csv',[keys.join(','),...results.map(x=>keys.map(k=>quote(x[k])).join(','))])};
+}
+v10Init();
+
+loadSaved();render();updateStats();loadListings();loadSECData();
+</script></body></html>
