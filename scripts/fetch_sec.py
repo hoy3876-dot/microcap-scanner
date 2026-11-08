@@ -2,7 +2,7 @@
 import json
 import os
 import time
-import urllib.requet
+import urllib.request
 
 from pathlib import Path
 from datetime import datetime, timezone
