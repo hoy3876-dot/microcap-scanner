@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>미국 초소형주 급등 검색기</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d2e;--panel2:#18263a;--line:#26364c;--txt:#eef4fb;--muted:#9aabc0;--green:#25c58a;--red:#ff6978;--yellow:#f5c451;--blue:#70a9ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:34px}
+header{padding:22px 16px 16px;background:linear-gradient(135deg,#14263d,#101827);border-bottom:1px solid var(--line)}
+h1{font-size:21px;margin:0 0 6px}header p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.wrap{max-width:760px;margin:auto;padding:14px}
+.notice{border:1px solid #66552b;background:#302817;color:#ffe3a0;padding:11px 12px;border-radius:12px;font-size:12px;line-height:1.55;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat,.card,.formbox{background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.stat{padding:12px 10px}.stat small{display:block;color:var(--muted);font-size:11px}.stat b{font-size:20px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+button{border:0;border-radius:10px;padding:11px 13px;font-weight:700;background:var(--green);color:#062117;font-size:13px}
+button.secondary{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+button.danger{background:#49242c;color:#ffd9de}
+input,select,textarea{width:100%;background:#0c1625;color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:11px;font-size:14px;min-width:0}
+label{font-size:12px;color:var(--muted);display:block;margin:0 0 5px}
+.formbox{padding:14px;margin:12px 0}.formbox h2,.sectiontitle{font-size:15px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field.full{grid-column:1/-1}
+.list{display:grid;gap:10px}.card{padding:13px}
+.cardtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.ticker{font-size:17px;font-weight:800}.company{font-size:11px;color:var(--muted);margin-top:2px}
+.score{font-size:20px;font-weight:850;color:var(--green);text-align:right}.score small{display:block;font-size:10px;color:var(--muted);font-weight:500}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.tag{font-size:10px;padding:5px 7px;border-radius:20px;background:#203148;color:#cfe0f7}
+.tag.warn{background:#493a1d;color:#ffe1a0}.tag.bad{background:#48252d;color:#ffb8c1}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.metric{background:#0d1726;border-radius:9px;padding:8px}.metric small{display:block;color:var(--muted);font-size:10px}.metric b{font-size:12px}
+.actions{display:flex;gap:7px;margin-top:11px}.actions button{flex:1}
+.empty{text-align:center;color:var(--muted);padding:28px 12px;border:1px dashed var(--line);border-radius:14px;font-size:13px}
+footer{color:var(--muted);font-size:10px;text-align:center;padding:18px;line-height:1.6}
+hr{border:0;border-top:1px solid var(--line);margin:13px 0}
+@media(max-width:390px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><h1>미국 초소형주 급등 검색기</h1><p>NASDAQ · NYSE American | 모바일 MVP v0.1<br>종목별 입력값으로 후보 점수를 계산하는 테스트 버전</p></header>
+<div class="wrap">
+<div class="notice"><b>테스트 데이터 안내</b><br>현재 버전은 실시간 시세·SEC 자동 조회와 연결되지 않았습니다. 직접 입력한 값 또는 예시 데이터만 평가합니다. 미확인 수치는 비워두세요. 점수는 매수 신호나 상승 확률이 아닙니다.</div>
+<div class="stats">
+ <div class="stat"><small>등록 종목</small><b id="count">0</b></div>
+ <div class="stat"><small>평균 점수</small><b id="avg">—</b></div>
+ <div class="stat"><small>70점 이상</small><b id="strong">0</b></div>
+</div>
+<div class="toolbar">
+ <button onclick="toggleForm()">＋ 종목 추가</button>
+ <button class="secondary" onclick="addSample()">예시 종목 불러오기</button>
+ <button class="secondary" onclick="exportData()">백업</button>
+ <button class="secondary" onclick="document.getElementById('importFile').click()">복원</button>
+ <input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)">
+</div>
+<section class="formbox" id="formbox" hidden>
+<h2 id="formTitle">종목 정보 입력</h2>
+<form id="stockForm">
+<div class="grid">
+ <div class="field"><label>티커 *</label><input id="ticker" required maxlength="12" placeholder="예: ABCD" autocapitalize="characters"></div>
+ <div class="field"><label>회사명 (선택)</label><input id="company" placeholder="회사명"></div>
+ <div class="field"><label>현재가 USD</label><input id="price" type="number" min="0" step="0.0001" placeholder="미확인 가능"></div>
+ <div class="field"><label>Float (백만 주)</label><input id="float" type="number" min="0" step="0.01" placeholder="예: 4.5"></div>
+ <div class="field"><label>RVOL (배수)</label><input id="rvol" type="number" min="0" step="0.1" placeholder="예: 3"></div>
+ <div class="field"><label>역병합 날짜/내용</label><input id="split" placeholder="예: 2026-09, 1:20 / 미확인"></div>
+ <div class="field"><label>희석 위험</label><select id="dilution"><option value="">미확인</option><option value="low">낮음 (공시 확인)</option><option value="mid">보통</option><option value="high">높음</option></select></div>
+ <div class="field"><label>워런트 구조</label><select id="warrant"><option value="">미확인</option><option value="favorable">고정형 OTM / 부담 제한적</option><option value="neutral">혼합·추가 확인 필요</option><option value="bad">변동형·리셋·대량 물량</option><option value="none">확인된 워런트 없음</option></select></div>
+ <div class="field"><label>촉매</label><select id="catalyst"><option value="">미확인</option><option value="near">1~4주 내 구체적 촉매</option><option value="some">촉매 있으나 날짜 불명확</option><option value="none">확인된 촉매 없음</option></select></div>
+ <div class="field"><label>Float 기준일 / 출처</label><input id="floatSource" placeholder="예: 10-Q, 2026-11-01"></div>
+ <div class="field full"><label>SEC·희석 메모 / 확인할 사항</label><textarea id="notes" rows="3" placeholder="ATM, ELOC, S-1/S-3, 424B, 전환사채, 등록 재판매 가능 물량 등"></textarea></div>
+</div>
+<div class="actions"><button type="submit">저장 및 점수 계산</button><button type="button" class="secondary" onclick="toggleForm()">취소</button></div>
+</form>
+</section>
+<h2 class="sectiontitle">후보 종목 순위</h2>
+<div class="list" id="list"><div class="empty">등록된 종목이 없습니다.<br>‘종목 추가’ 또는 ‘예시 종목 불러오기’를 눌러 시작하세요.</div></div>
+<footer>점수 배점: 거래량 20 · Float 15 · 희석 25 · 워런트 10 · 촉매 20 · 가격/정보완성도 10<br>미확인 데이터는 임의로 추정하지 않습니다. 본 도구는 투자 판단을 보조하는 테스트용입니다.</footer>
+</div>
+<script>
+const KEY='microcap_scanner_v01';
+let stocks=JSON.parse(localStorage.getItem(KEY)||'[]'), editing=null;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(stocks));render()}
+function score(s){
+ let p=0,known=0;
+ if(s.rvol!==null){known++;p+=s.rvol>=5?20:s.rvol>=3?16:s.rvol>=2?10:s.rvol>=1?5:0}
+ if(s.float!==null){known++;p+=s.float<=5?15:s.float<=10?12:s.float<=20?7:2}
+ if(s.dilution){known++;p+=({low:25,mid:13,high:0})[s.dilution]||0}
+ if(s.warrant){known++;p+=({favorable:10,neutral:5,bad:0,none:10})[s.warrant]||0}
+ if(s.catalyst){known++;p+=({near:20,some:10,none:0})[s.catalyst]||0}
+ if(s.price!==null){known++;p+=s.price>=.1&&s.price<=5?5:2}
+ if(s.split) p+=2;
+ if(s.floatSource) p+=2;
+ return {score:Math.min(100,p),known};
+}
+function render(){
+ stocks.sort((a,b)=>score(b).score-score(a).score);
+ $('count').textContent=stocks.length;
+ $('avg').textContent=stocks.length?Math.round(stocks.reduce((a,s)=>a+score(s).score,0)/stocks.length):'—';
+ $('strong').textContent=stocks.filter(s=>score(s).score>=70).length;
+ if(!stocks.length){$('list').innerHTML='<div class="empty">등록된 종목이 없습니다.<br>‘종목 추가’ 또는 ‘예시 종목 불러오기’를 눌러 시작하세요.</div>';return}
+ $('list').innerHTML=stocks.map((s,i)=>{let z=score(s);let status=z.known<4?'데이터 부족':z.score>=70?'우선 검토':z.score>=50?'관찰':'낮은 점수';return `<article class="card">
+ <div class="cardtop"><div><div class="ticker">${i+1}. ${esc(s.ticker)}</div><div class="company">${esc(s.company||'회사명 미입력')}</div></div><div class="score">${z.score}<small>/100 · ${status}</small></div></div>
+ <div class="tags"><span class="tag">${z.known}/6 항목 확인</span>${s.rvol!==null?`<span class="tag">RVOL ${s.rvol}x</span>`:'<span class="tag warn">RVOL 미확인</span>'}${s.float!==null?`<span class="tag">Float ${s.float}M</span>`:'<span class="tag warn">Float 미확인</span>'}${s.dilution==='high'?'<span class="tag bad">희석 위험 높음</span>':''}</div>
+ <div class="metrics"><div class="metric"><small>현재가</small><b>${s.price===null?'미확인':'$'+s.price}</b></div><div class="metric"><small>희석 위험</small><b>${label(s.dilution,['낮음','보통','높음'])}</b></div><div class="metric"><small>워런트</small><b>${label(s.warrant,['고정형 OTM','혼합','변동형/대량','없음'])}</b></div><div class="metric"><small>촉매</small><b>${label(s.catalyst,['1~4주 내','날짜 불명','없음'])}</b></div><div class="metric"><small>역병합</small><b>${esc(s.split||'미확인')}</b></div><div class="metric"><small>자료 출처</small><b>${esc(s.floatSource||'미기재')}</b></div></div>
+ ${s.notes?`<hr><div style="font-size:12px;color:#c5d2e2;white-space:pre-wrap">${esc(s.notes)}</div>`:''}
+ <div class="actions"><button class="secondary" onclick="editStock('${s.id}')">수정</button><button class="danger" onclick="delStock('${s.id}')">삭제</button></div></article>`}).join('');
+}
+function label(v,arr){if(!v)return '미확인';return ({low:arr[0],mid:arr[1],high:arr[2],favorable:arr[0],neutral:arr[1],bad:arr[2],none:arr[3],near:arr[0],some:arr[1]})[v]||'미확인'}
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toggleForm(){ $('formbox').hidden=!$('formbox').hidden; if($('formbox').hidden)resetForm()}
+function resetForm(){editing=null;$('stockForm').reset();$('formTitle').textContent='종목 정보 입력'}
+function val(id){let v=$(id).value.trim();return v===''?null:v}
+$('stockForm').addEventListener('submit',e=>{e.preventDefault();let ticker=val('ticker').toUpperCase();if(!ticker)return;
+let s={id:editing||String(Date.now()),ticker,company:val('company')||'',price:num('price'),float:num('float'),rvol:num('rvol'),split:val('split')||'',dilution:val('dilution')||'',warrant:val('warrant')||'',catalyst:val('catalyst')||'',floatSource:val('floatSource')||'',notes:val('notes')||''};
+if(editing){stocks=stocks.map(x=>x.id===editing?s:x)}else stocks.push(s);save();$('formbox').hidden=true;resetForm()});
+function num(id){let v=val(id);return v===null?null:Number(v)}
+function editStock(id){let s=stocks.find(x=>x.id===id);if(!s)return;editing=id;$('formbox').hidden=false;$('formTitle').textContent=s.ticker+' 수정';for(let k of ['ticker','company','price','float','rvol','split','dilution','warrant','catalyst','floatSource','notes'])$(k).value=s[k]??'';window.scrollTo({top:0,behavior:'smooth'})}
+function delStock(id){if(confirm('이 종목을 삭제할까요?')){stocks=stocks.filter(x=>x.id!==id);save()}}
+function addSample(){if(stocks.some(s=>s.ticker==='DEMO'))return alert('예시 종목이 이미 있습니다.');stocks.push({id:'demo1',ticker:'DEMO',company:'가상 예시 데이터 (실제 종목 아님)',price:1.25,float:4.2,rvol:3.4,split:'2026-09, 1:20 (예시)',dilution:'mid',warrant:'favorable',catalyst:'near',floatSource:'가상 입력값',notes:'이 항목은 기능 확인용 가상 데이터입니다. 실제 투자에 사용하지 마세요.'});save()}
+function exportData(){let blob=new Blob([JSON.stringify(stocks,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='microcap-watchlist-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d))throw 0;stocks=d;save();alert('복원 완료')}catch(_){alert('백업 파일을 읽지 못했습니다')}};r.readAsText(f);e.target.value=''}
+render();
+</script>
+</body></html>
