@@ -27,38 +27,56 @@ jobs:
           }
 
           def classify(name):
-              n = re.sub(r"\s+", " ", name.lower()).strip()
+              n = " ".join(name.lower().replace(",", " ").split())
+              words = set(n.split())
 
-              excluded = [
-                  r"\bwarrants?\b", r"\brights?\b",
-                  r"\bunits?\b", r"\bpreferred\b",
-                  r"\bnotes?\b", r"\bdebentures?\b",
-                  r"\bbonds?\b", r"\bsubscription receipts?\b",
-                  r"\bwhen[- ]issued\b", r"\betf\b",
-                  r"\bfund\b", r"exchange[- ]traded",
-                  r"\bclosed[- ]end\b", r"\binvestment trust\b",
-                  r"\bmutual fund\b", r"\bindex fund\b",
-                  r"shares of beneficial interest"
+              excluded_words = {
+                  "warrant", "warrants", "right", "rights",
+                  "unit", "units", "preferred", "note", "notes",
+                  "debenture", "debentures", "bond", "bonds"
+              }
+
+              excluded_phrases = [
+                  "exchange traded fund", "exchange-traded fund",
+                  "closed-end fund", "closed end fund",
+                  "investment company", "investment trust",
+                  "mutual fund", "money market fund",
+                  "shares of beneficial interest",
+                  "subscription receipt"
               ]
-              if any(re.search(p, n) for p in excluded):
+
+              if words & excluded_words:
                   return None
 
-              adr = [
-                  r"american depositary shares?",
-                  r"american depositary receipts?",
-                  r"global depositary shares?",
-                  r"global depositary receipts?",
-                  r"\bADR\b", r"\bADS\b"
+              if any(p in n for p in excluded_phrases):
+                  return None
+
+              if "etf" in words or "fund" in words:
+                  return None
+
+              adr_phrases = [
+                  "american depositary share",
+                  "american depositary receipt",
+                  "american depository share",
+                  "american depository receipt",
+                  "global depositary share",
+                  "global depositary receipt",
+                  "global depository share",
+                  "global depository receipt"
               ]
-              if any(re.search(p, n) for p in adr):
+
+              if any(p in n for p in adr_phrases):
                   return "ADR"
 
-              common = [
-                  r"\bcommon stock\b",
-                  r"\bcommon shares?\b",
-                  r"\bordinary shares?\b"
+              if "adr" in words or "ads" in words:
+                  return "ADR"
+
+              common_phrases = [
+                  "common stock", "common shares",
+                  "ordinary share", "ordinary shares"
               ]
-              if any(re.search(p, n) for p in common):
+
+              if any(p in n for p in common_phrases):
                   return "보통주"
 
               return None
