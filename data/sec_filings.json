@@ -1,11 +1,41 @@
 {
-  "generated_at": "2026-11-09T04:34:18.785224+00:00",
+  "generated_at": "2026-11-10T04:24:29.234247+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2128,
+  "filing_count": 2131,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "SHFS",
+      "company": "SHF Holdings, Inc.",
+      "cik": "0001854963",
+      "form": "10-Q",
+      "filing_date": "2026-11-09",
+      "accession": "0001493152-26-050640",
+      "document": "form10-q.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1854963/000149315226050640/form10-q.htm"
+    },
+    {
+      "ticker": "SHFS",
+      "company": "SHF Holdings, Inc.",
+      "cik": "0001854963",
+      "form": "8-K",
+      "filing_date": "2026-11-09",
+      "accession": "0001493152-26-050636",
+      "document": "form8-k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1854963/000149315226050636/form8-k.htm"
+    },
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "8-K",
+      "filing_date": "2026-11-09",
+      "accession": "0001214659-26-013841",
+      "document": "o1162668k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926013841/o1162668k.htm"
+    },
     {
       "ticker": "GPUS",
       "company": "Hyperscale Data, Inc.",
