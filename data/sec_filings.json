@@ -1,11 +1,21 @@
 {
-  "generated_at": "2026-11-10T04:24:29.234247+00:00",
+  "generated_at": "2026-11-11T04:28:59.703324+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2131,
+  "filing_count": 2128,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "VEEA",
+      "company": "VEEA INC.",
+      "cik": "0001840317",
+      "form": "DEF 14A",
+      "filing_date": "2026-11-10",
+      "accession": "0001213900-26-118136",
+      "document": "ea0311268-01.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1840317/000121390026118136/ea0311268-01.htm"
+    },
     {
       "ticker": "SHFS",
       "company": "SHF Holdings, Inc.",
@@ -19075,46 +19085,6 @@
       "accession": "0001683168-21-002683",
       "document": "ipower_8k.htm",
       "url": "https://www.sec.gov/Archives/edgar/data/1830072/000168316821002683/ipower_8k.htm"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "4",
-      "filing_date": "2021-06-22",
-      "accession": "0001214659-21-006802",
-      "document": "xslF345X03/marketforms-53167.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921006802/xslF345X03/marketforms-53167.xml"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "4",
-      "filing_date": "2021-06-21",
-      "accession": "0001214659-21-006789",
-      "document": "xslF345X03/marketforms-53171.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921006789/xslF345X03/marketforms-53171.xml"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "3",
-      "filing_date": "2021-06-21",
-      "accession": "0001214659-21-006758",
-      "document": "xslF345X02/marketforms-53166.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921006758/xslF345X02/marketforms-53166.xml"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "4",
-      "filing_date": "2021-06-17",
-      "accession": "0001864317-21-000004",
-      "document": "xslF345X03/primary_doc.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000186431721000004/xslF345X03/primary_doc.xml"
     },
     {
       "ticker": "VEEA",
