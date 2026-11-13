@@ -1,11 +1,31 @@
 {
-  "generated_at": "2026-11-12T04:28:48.638185+00:00",
+  "generated_at": "2026-11-13T04:28:47.121797+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2128,
+  "filing_count": 2130,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "SHFS",
+      "company": "SHF Holdings, Inc.",
+      "cik": "0001854963",
+      "form": "8-K",
+      "filing_date": "2026-11-12",
+      "accession": "0001493152-26-051499",
+      "document": "form8-k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1854963/000149315226051499/form8-k.htm"
+    },
+    {
+      "ticker": "VEEA",
+      "company": "VEEA INC.",
+      "cik": "0001840317",
+      "form": "10-Q",
+      "filing_date": "2026-11-12",
+      "accession": "0001213900-26-118215",
+      "document": "ea0311070-10q_veea.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1840317/000121390026118215/ea0311070-10q_veea.htm"
+    },
     {
       "ticker": "VEEA",
       "company": "VEEA INC.",
