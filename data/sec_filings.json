@@ -1,11 +1,51 @@
 {
-  "generated_at": "2026-11-16T05:00:06.614330+00:00",
+  "generated_at": "2026-11-17T04:28:26.022227+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2130,
+  "filing_count": 2134,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "8-K",
+      "filing_date": "2026-11-16",
+      "accession": "0001214659-26-014450",
+      "document": "d11162638k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926014450/d11162638k.htm"
+    },
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "8-K",
+      "filing_date": "2026-11-16",
+      "accession": "0001214659-26-014423",
+      "document": "d10162618k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926014423/d10162618k.htm"
+    },
+    {
+      "ticker": "IPW",
+      "company": "iPower Inc.",
+      "cik": "0001830072",
+      "form": "10-Q",
+      "filing_date": "2026-11-16",
+      "accession": "0001683168-26-008868",
+      "document": "ipower_i10q-093026.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1830072/000168316826008868/ipower_i10q-093026.htm"
+    },
+    {
+      "ticker": "IPW",
+      "company": "iPower Inc.",
+      "cik": "0001830072",
+      "form": "8-K",
+      "filing_date": "2026-11-16",
+      "accession": "0001683168-26-008776",
+      "document": "ipower_8k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1830072/000168316826008776/ipower_8k.htm"
+    },
     {
       "ticker": "SHFS",
       "company": "SHF Holdings, Inc.",
