@@ -1,11 +1,31 @@
 {
-  "generated_at": "2026-11-17T04:28:26.022227+00:00",
+  "generated_at": "2026-11-18T04:30:33.138646+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2134,
+  "filing_count": 2136,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "BNAI",
+      "company": "Brand Engagement Network Inc.",
+      "cik": "0001838163",
+      "form": "8-K",
+      "filing_date": "2026-11-17",
+      "accession": "0001493152-26-052679",
+      "document": "form8-k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1838163/000149315226052679/form8-k.htm"
+    },
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "8-K",
+      "filing_date": "2026-11-17",
+      "accession": "0001214659-26-014510",
+      "document": "x11172618k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926014510/x11172618k.htm"
+    },
     {
       "ticker": "GPUS",
       "company": "Hyperscale Data, Inc.",
