@@ -1,11 +1,31 @@
 {
-  "generated_at": "2026-11-18T04:30:33.138646+00:00",
+  "generated_at": "2026-11-19T04:32:16.518455+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2136,
+  "filing_count": 2131,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "10-Q",
+      "filing_date": "2026-11-18",
+      "accession": "0001214659-26-014565",
+      "document": "hd111226110q.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926014565/hd111226110q.htm"
+    },
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "8-K",
+      "filing_date": "2026-11-18",
+      "accession": "0001214659-26-014553",
+      "document": "o11172658k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926014553/o11172658k.htm"
+    },
     {
       "ticker": "BNAI",
       "company": "Brand Engagement Network Inc.",
@@ -18897,26 +18917,6 @@
       "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921007545/xslF345X03/marketforms-53419.xml"
     },
     {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "4",
-      "filing_date": "2021-07-09",
-      "accession": "0001864317-21-000009",
-      "document": "xslF345X03/primary_doc.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000186431721000009/xslF345X03/primary_doc.xml"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "SC 13D",
-      "filing_date": "2021-07-09",
-      "accession": "0001214659-21-007410",
-      "document": "j78214sc13d.htm",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921007410/j78214sc13d.htm"
-    },
-    {
       "ticker": "SHFS",
       "company": "SHF Holdings, Inc.",
       "cik": "0001854963",
@@ -18927,16 +18927,6 @@
       "url": "https://www.sec.gov/Archives/edgar/data/1854963/000110465921090284/tm2121740d1_sc13g.htm"
     },
     {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "3",
-      "filing_date": "2021-07-07",
-      "accession": "0001864317-21-000008",
-      "document": "xslF345X02/primary_doc.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000186431721000008/xslF345X02/primary_doc.xml"
-    },
-    {
       "ticker": "SHFS",
       "company": "SHF Holdings, Inc.",
       "cik": "0001854963",
@@ -18945,16 +18935,6 @@
       "accession": "0001461790-21-000025",
       "document": "13G_NLITU_20210702.htm",
       "url": "https://www.sec.gov/Archives/edgar/data/1854963/000146179021000025/13G_NLITU_20210702.htm"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "8-K",
-      "filing_date": "2021-07-06",
-      "accession": "0001214659-21-007285",
-      "document": "j762108k.htm",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921007285/j762108k.htm"
     },
     {
       "ticker": "SHFS",
@@ -18987,16 +18967,6 @@
       "url": "https://www.sec.gov/Archives/edgar/data/1854963/000149315221015821/formsc13g.htm"
     },
     {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "SC 13D",
-      "filing_date": "2021-07-01",
-      "accession": "0001214659-21-007115",
-      "document": "e630214sc13d.htm",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465921007115/e630214sc13d.htm"
-    },
-    {
       "ticker": "KXIN",
       "company": "Kaixin Holdings",
       "cik": "0001713539",
@@ -19005,26 +18975,6 @@
       "accession": "0001104659-21-087136",
       "document": "tm2121024d1_6k.htm",
       "url": "https://www.sec.gov/Archives/edgar/data/1713539/000110465921087136/tm2121024d1_6k.htm"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "4",
-      "filing_date": "2021-06-30",
-      "accession": "0001864317-21-000007",
-      "document": "xslF345X03/primary_doc.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000186431721000007/xslF345X03/primary_doc.xml"
-    },
-    {
-      "ticker": "GPUS",
-      "company": "Hyperscale Data, Inc.",
-      "cik": "0000896493",
-      "form": "4",
-      "filing_date": "2021-06-29",
-      "accession": "0001864317-21-000006",
-      "document": "xslF345X03/primary_doc.xml",
-      "url": "https://www.sec.gov/Archives/edgar/data/896493/000186431721000006/xslF345X03/primary_doc.xml"
     },
     {
       "ticker": "SHFS",
