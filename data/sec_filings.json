@@ -1,11 +1,21 @@
 {
-  "generated_at": "2026-11-19T04:32:16.518455+00:00",
+  "generated_at": "2026-11-20T04:29:48.002217+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2131,
+  "filing_count": 2132,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "GPUS",
+      "company": "Hyperscale Data, Inc.",
+      "cik": "0000896493",
+      "form": "8-K",
+      "filing_date": "2026-11-19",
+      "accession": "0001214659-26-014587",
+      "document": "o11192618k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/896493/000121465926014587/o11192618k.htm"
+    },
     {
       "ticker": "GPUS",
       "company": "Hyperscale Data, Inc.",
