@@ -1,11 +1,31 @@
 {
-  "generated_at": "2026-11-20T04:29:48.002217+00:00",
+  "generated_at": "2026-11-23T04:43:04.171778+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2132,
+  "filing_count": 2134,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "SHFS",
+      "company": "SHF Holdings, Inc.",
+      "cik": "0001854963",
+      "form": "8-K",
+      "filing_date": "2026-11-20",
+      "accession": "0001493152-26-053485",
+      "document": "form8-k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1854963/000149315226053485/form8-k.htm"
+    },
+    {
+      "ticker": "BNAI",
+      "company": "Brand Engagement Network Inc.",
+      "cik": "0001838163",
+      "form": "4",
+      "filing_date": "2026-11-20",
+      "accession": "0001493152-26-053593",
+      "document": "xslF345X06/ownership.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1838163/000149315226053593/xslF345X06/ownership.xml"
+    },
     {
       "ticker": "GPUS",
       "company": "Hyperscale Data, Inc.",
