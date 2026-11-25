@@ -1,11 +1,21 @@
 {
-  "generated_at": "2026-11-24T04:35:14.061394+00:00",
+  "generated_at": "2026-11-25T04:39:18.864956+00:00",
   "source": "SEC EDGAR",
   "data_type": "Official SEC filing metadata",
   "watchlist_count": 10,
-  "filing_count": 2137,
+  "filing_count": 2138,
   "error_count": 0,
   "filings": [
+    {
+      "ticker": "BNAI",
+      "company": "Brand Engagement Network Inc.",
+      "cik": "0001838163",
+      "form": "8-K",
+      "filing_date": "2026-11-24",
+      "accession": "0001493152-26-053892",
+      "document": "form8-k.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1838163/000149315226053892/form8-k.htm"
+    },
     {
       "ticker": "BNAI",
       "company": "Brand Engagement Network Inc.",
